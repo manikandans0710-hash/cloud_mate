@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Mate • Cloud Computing</title>
+    <style>
+        :root {
+            --accent: #5b7cfa;
+            --accent2: #8b5cf6;
+            --bg: #070b14;
+            --panel: rgba(16, 23, 39, .82);
+            --border: rgba(255,255,255,.09);
+            --text: #f5f7fb;
+            --muted: #98a2b3;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 15% 10%, color-mix(in srgb, var(--accent) 25%, transparent), transparent 28%),
+                radial-gradient(circle at 90% 90%, color-mix(in srgb, var(--accent2) 22%, transparent), transparent 30%),
+                var(--bg);
+            display: grid;
+            place-items: center;
+            padding: 20px;
+        }
+        .app {
+            width: min(1050px, 100%);
+            height: min(760px, 92vh);
+            display: grid;
+            grid-template-columns: 270px 1fr;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: rgba(9, 14, 26, .78);
+            backdrop-filter: blur(22px);
+            box-shadow: 0 30px 90px rgba(0,0,0,.42);
+        }
+        aside {
+            padding: 28px 22px;
+            border-right: 1px solid var(--border);
+            background: linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.015));
+        }
+        .logo {
+            width: 58px; height: 58px; display: grid; place-items: center;
+            border-radius: 18px; font-size: 29px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            box-shadow: 0 12px 35px color-mix(in srgb, var(--accent) 30%, transparent);
+        }
+        h1 { margin: 18px 0 6px; font-size: 25px; }
+        .domain { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+        .tagline { color: var(--muted); line-height: 1.55; font-size: 14px; margin-top: 14px; }
+        .scope {
+            margin-top: 28px; padding: 15px; border-radius: 17px;
+            background: rgba(255,255,255,.045); border: 1px solid var(--border);
+            color: #cbd5e1; font-size: 13px; line-height: 1.55;
+        }
+        main { display: grid; grid-template-rows: auto 1fr auto; min-width: 0; }
+        header {
+            padding: 20px 24px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .status { display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 12px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 14px #22c55e; }
+        #messages { overflow-y: auto; padding: 28px; }
+        .message { display: flex; gap: 12px; margin-bottom: 20px; animation: rise .2s ease; }
+        .message.user { justify-content: flex-end; }
+        .avatar { flex: 0 0 34px; height: 34px; border-radius: 12px; display:grid; place-items:center; background: rgba(255,255,255,.07); }
+        .bubble {
+            max-width: min(720px, 82%); padding: 13px 16px; border-radius: 18px;
+            background: rgba(255,255,255,.055); border: 1px solid var(--border);
+            white-space: pre-wrap; line-height: 1.6; font-size: 14px;
+        }
+        .user .bubble {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: 0; color: white; border-bottom-right-radius: 5px;
+        }
+        .composer { padding: 18px 22px 22px; border-top: 1px solid var(--border); }
+        .input-wrap { display: flex; gap: 10px; padding: 8px; border: 1px solid var(--border); border-radius: 18px; background: rgba(255,255,255,.04); }
+        textarea {
+            flex: 1; resize: none; border: 0; outline: 0; background: transparent; color: var(--text);
+            padding: 10px 12px; font: inherit; max-height: 130px;
+        }
+        button {
+            width: 46px; height: 46px; border: 0; border-radius: 14px; cursor: pointer;
+            color: white; font-size: 18px; background: linear-gradient(135deg, var(--accent), var(--accent2));
+        }
+        button:disabled { opacity: .55; cursor: not-allowed; }
+        .hint { color: var(--muted); font-size: 11px; margin: 8px 5px 0; }
+        @keyframes rise { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 760px) {
+            .app { grid-template-columns: 1fr; height: 94vh; }
+            aside { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <aside>
+        <div class="logo">☁️</div>
+        <h1>Cloud Mate</h1>
+        <div class="domain">Cloud Computing</div>
+        <div class="tagline">Your focused cloud computing study companion</div>
+        <div class="scope">
+            <strong>Study-only mode</strong><br><br>
+            I answer questions related to Cloud Computing. Unrelated questions are redirected back to this study domain.
+        </div>
+    </aside>
+
+    <main>
+        <header>
+            <div>
+                <strong>Cloud Mate</strong><br>
+                <span style="color:var(--muted);font-size:12px">Cloud Computing</span>
+            </div>
+            <div class="status"><span class="dot"></span> Gemini 3.1 Flash-Lite</div>
+        </header>
+
+        <section id="messages"></section>
+
+        <div class="composer">
+            <div class="input-wrap">
+                <textarea id="input" rows="1" placeholder="Ask a Cloud Computing study question..."></textarea>
+                <button id="send" aria-label="Send">➤</button>
+            </div>
+            <div class="hint">Study-focused assistant • Press Enter to send, Shift + Enter for a new line</div>
+        </div>
+    </main>
+</div>
+
+<script>
+const messages = document.getElementById("messages");
+const input = document.getElementById("input");
+const send = document.getElementById("send");
+
+function addMessage(text, role) {
+    const row = document.createElement("div");
+    row.className = "message " + role;
+
+    if (role === "assistant") {
+        const avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.textContent = "☁️";
+        row.appendChild(avatar);
+    }
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.textContent = text;
+    row.appendChild(bubble);
+    messages.appendChild(row);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+addMessage('Hi! I’m Cloud Mate. Ask me a Cloud Computing study question.', "assistant");
+
+async function sendMessage() {
+    const message = input.value.trim();
+    if (!message || send.disabled) return;
+
+    addMessage(message, "user");
+    input.value = "";
+    send.disabled = true;
+
+    const thinking = document.createElement("div");
+    thinking.className = "message assistant";
+    thinking.innerHTML = '<div class="avatar">☁️</div><div class="bubble">Thinking...</div>';
+    messages.appendChild(thinking);
+    messages.scrollTop = messages.scrollHeight;
+
+    try {
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+        thinking.remove();
+
+        if (!response.ok) {
+            addMessage(data.error || "Something went wrong.", "assistant");
+        } else {
+            addMessage(data.answer, "assistant");
+        }
+    } catch (error) {
+        thinking.remove();
+        addMessage("Unable to connect to the chatbot server. Please check the Flask application.", "assistant");
+    } finally {
+        send.disabled = false;
+        input.focus();
+    }
+}
+
+send.addEventListener("click", sendMessage);
+input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+    }
+});
+</script>
+</body>
+</html>
